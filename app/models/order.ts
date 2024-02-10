@@ -15,25 +15,25 @@ export default class Order extends BaseModel {
   declare id: number
 
   @column()
-  declare user_id: number
+  declare userId: number
 
   @column()
   declare statut: string
 
   @column()
-  declare totalPrice: number
+  declare total_price: number
 
   @column()
-  declare quantiy: number
+  declare quantity: number
 
   @column()
-  declare shippingAddress: string
+  declare shipping_address: string
 
   @column()
-  declare paymentMethod: string
+  declare payment_method: string
 
   @column()
-  declare phoneNumber: string
+  declare phone_number: string
 
   @column()
   declare notes: string

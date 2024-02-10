@@ -4,12 +4,12 @@ import hash from '@adonisjs/core/services/hash'
 
 export const UserFactory = Factory.define(User, async ({ faker }) => {
   return {
-    firstName: faker.person.firstName(),
-    lastName: faker.person.lastName(),
+    first_name: faker.person.firstName(),
+    last_name: faker.person.lastName(),
     email: faker.internet.email(),
-    ipAddress: faker.internet.ip(),
+    ip_address: faker.internet.ip(),
     address: faker.location.city(),
-    phoneNumber: faker.phone.number(),
+    phone_number: faker.phone.number(),
     password: await hash.make(faker.internet.password()),
   }
 }).build()
