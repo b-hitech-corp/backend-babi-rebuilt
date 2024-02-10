@@ -6,7 +6,8 @@ export default class extends BaseSchema {
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-      table.boolean('statut')
+      table.string('statut')
+      table.boolean('isdelivered').defaultTo(false)
       table.float('totalPrice')
       table.integer('quantity')
       table.string('shippingAddress')

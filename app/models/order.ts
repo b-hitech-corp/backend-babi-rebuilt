@@ -14,6 +14,30 @@ export default class Order extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
 
+  @column()
+  declare user_id: number
+
+  @column()
+  declare statut: string
+
+  @column()
+  declare totalPrice: number
+
+  @column()
+  declare quantiy: number
+
+  @column()
+  declare shippingAddress: string
+
+  @column()
+  declare paymentMethod: string
+
+  @column()
+  declare phoneNumber: string
+
+  @column()
+  declare notes: string
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
