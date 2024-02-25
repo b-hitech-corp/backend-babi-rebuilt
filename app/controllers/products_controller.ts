@@ -11,15 +11,25 @@ export default class ProductsController {
    * Display a list of products
    */
   async index({ response }: HttpContext) {
-    return response.ok(this.productService.getAll())
+    const products = await this.productService.getAll()
+    return response.ok(products)
   }
 
   /**
    * Store a new product
    */
   async store({ request, response }: HttpContext) {
+    const images = request.files('images', {
+      size: '5mb',
+      extnames: ['jpg', 'png', 'jpeg'],
+    })
+    if (!images || !images.length) {
+      return response.badRequest({ message: 'Image is required' })
+    }
+
     const payload = await createProductValidator.validate(request.all())
-    return response.created(this.productService.create(payload))
+    const result = await this.productService.create(payload, images)
+    return response.created(result)
   }
 
   /**

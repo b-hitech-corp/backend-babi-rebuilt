@@ -1,16 +1,16 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
-import type { HasMany } from '@adonisjs/lucid/types/relations'
+import { BaseModel, column, hasMany, manyToMany } from '@adonisjs/lucid/orm'
+import type { HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
 import Color from './color.js'
 import Size from './size.js'
 import Image from './image.js'
 
 export default class Product extends BaseModel {
-  @hasMany(() => Color)
-  declare colors: HasMany<typeof Color>
+  @manyToMany(() => Size)
+  declare sizes: ManyToMany<typeof Size>
 
-  @hasMany(() => Size)
-  declare sizes: HasMany<typeof Size>
+  @manyToMany(() => Color)
+  declare colors: ManyToMany<typeof Color>
 
   @hasMany(() => Image)
   declare images: HasMany<typeof Image>

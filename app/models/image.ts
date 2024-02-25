@@ -11,10 +11,13 @@ export default class Image extends BaseModel {
   declare id: number
 
   @column()
+  declare productId: number
+
+  @column()
   declare url: string
 
   @column()
-  declare amazonId: string
+  declare amazon: string
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

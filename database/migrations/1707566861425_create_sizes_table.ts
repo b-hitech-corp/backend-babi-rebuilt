@@ -7,8 +7,6 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table.string('name')
-      table.string('product_id')
-      table.foreign('product_id').references('products.id')
 
       table.timestamp('created_at')
       table.timestamp('updated_at')
