@@ -2,9 +2,10 @@ import { DateTime } from 'luxon'
 import { withAuthFinder } from '@adonisjs/auth'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
-import type { HasMany } from '@adonisjs/lucid/types/relations'
-import { column, BaseModel, hasMany } from '@adonisjs/lucid/orm'
+import type { HasMany, HasOne } from '@adonisjs/lucid/types/relations'
+import { column, BaseModel, hasMany, hasOne } from '@adonisjs/lucid/orm'
 import Order from './order.js'
+import Cart from './cart.js'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -14,6 +15,9 @@ const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
 export default class User extends compose(BaseModel, AuthFinder) {
   @hasMany(() => Order)
   declare orders: HasMany<typeof Order>
+
+  @hasOne(() => Cart)
+  declare cart: HasOne<typeof Cart>
 
   @column({ isPrimary: true })
   declare id: number
