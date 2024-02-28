@@ -1,7 +1,7 @@
 import vine from '@vinejs/vine'
 
 /**
- * Validates the post's creation action
+ * Validates the product's creation action
  */
 export const createProductValidator = vine.compile(
   vine.object({
@@ -16,7 +16,7 @@ export const createProductValidator = vine.compile(
 )
 
 /**
- * Validates the post's update action
+ * Validates the product's update action
  */
 export const updateProductValidator = vine.compile(
   vine.object({

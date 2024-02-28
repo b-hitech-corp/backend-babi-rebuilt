@@ -4,8 +4,15 @@ import type { HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
 import Color from './color.js'
 import Size from './size.js'
 import Image from './image.js'
+import Order from './order.js'
 
 export default class Product extends BaseModel {
+  @manyToMany(() => Order, {
+    pivotTable: 'order_product',
+    pivotColumns: ['quantity'],
+  })
+  declare orders: ManyToMany<typeof Order>
+
   @manyToMany(() => Size)
   declare sizes: ManyToMany<typeof Size>
 

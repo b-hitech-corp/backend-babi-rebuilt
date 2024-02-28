@@ -8,7 +8,13 @@ export default class Order extends BaseModel {
   @belongsTo(() => User)
   declare user: BelongsTo<typeof User>
 
-  @manyToMany(() => Product)
+  @manyToMany(() => Product, {
+    pivotColumns: ['quantity'],
+    pivotTimestamps: {
+      createdAt: 'created_at',
+      updatedAt: 'updated_at',
+    },
+  })
   declare products: ManyToMany<typeof Product>
 
   @column({ isPrimary: true })
@@ -18,7 +24,7 @@ export default class Order extends BaseModel {
   declare userId: number
 
   @column()
-  declare statut: string
+  declare status: string
 
   @column()
   declare total_price: number
@@ -34,6 +40,9 @@ export default class Order extends BaseModel {
 
   @column()
   declare phone_number: string
+
+  @column()
+  declare is_delivered: boolean
 
   @column()
   declare notes: string

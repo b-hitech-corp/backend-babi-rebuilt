@@ -4,11 +4,10 @@ import { UserFactory } from './user_factory.js'
 
 export const OrderFactory = Factory.define(Order, ({ faker }) => ({
   total_price: +faker.commerce.price(),
-  quantity: faker.number.int(),
   shipping_address: faker.location.city(),
   payment_method: faker.lorem.word(),
   phone_number: faker.phone.number(),
   notes: faker.lorem.text(),
 }))
-  .relation('user', () => UserFactory)
+  .relation('user', () => UserFactory.create())
   .build()

@@ -6,18 +6,18 @@ export default class extends BaseSchema {
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-      table.string('statut')
-      table.boolean('isdelivered').defaultTo(false)
-      table.float('total_price')
-      table.integer('quantity')
+      table
+        .enum('status', ['pending', 'processing', 'shipped', 'delivered', 'canceled'])
+        .notNullable()
+        .defaultTo('pending')
+      table.boolean('is_delivered').defaultTo(false)
+      table.decimal('total_price')
       table.string('shipping_address')
       table.string('payment_method')
       table.string('phone_number')
       table.text('notes').nullable()
 
-      table.string('user_id')
-      table.foreign('user_id').references('users.id')
-
+      table.integer('user_id').unsigned().references('users.id').onDelete('CASCADE')
       table.timestamp('created_at')
       table.timestamp('updated_at')
     })
