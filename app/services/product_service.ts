@@ -85,4 +85,32 @@ export default class ProductService {
 
     return { success: true }
   }
+
+  /**
+   * Get the top 100 most ordered products
+   */
+  async mostOrdered(): Promise<Product[]> {
+    const products = await Product.query()
+      .withCount('orders', (query) => query.as('orders_count'))
+      .orderBy('orders_count', 'desc')
+      .limit(100)
+      .exec()
+
+    return products
+  }
+
+  /**
+   * Get the top selling products by summing quantity from all orders
+   */
+  async topSelling(): Promise<Product[]> {
+    const products = await Product.query()
+      .withAggregate('orders', (query) => {
+        query.sum('quantity').as('quantity_sold')
+      })
+      .orderBy('quantity_sold', 'desc')
+      .limit(100)
+      .exec()
+
+    return products
+  }
 }

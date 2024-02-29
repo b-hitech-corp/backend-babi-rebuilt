@@ -65,4 +65,20 @@ export default class ProductsController {
 
     return response.noContent()
   }
+
+  /**
+   * Top selling products
+   */
+  async topSelling({ response }: HttpContext) {
+    const products = await this.productService.topSelling()
+    return response.ok(products)
+  }
+
+  /**
+   * Most ordered products
+   */
+  async mostOrdered({ response }: HttpContext) {
+    const products = await this.productService.mostOrdered()
+    return response.ok(products)
+  }
 }

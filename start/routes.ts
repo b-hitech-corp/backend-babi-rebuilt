@@ -16,7 +16,10 @@ const NewslettersController = () => import('#controllers/newsletters_controller'
 router
   .group(() => {
     // Products and orders routes
+    router.get('products/topSelling', [ProductsController, 'topSelling'])
+    router.get('products/mostOrdered', [ProductsController, 'mostOrdered'])
     router.resource('products', ProductsController).apiOnly()
+
     router.resource('orders', OrdersController).apiOnly()
 
     // Cart routes
