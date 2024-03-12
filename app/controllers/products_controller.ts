@@ -10,8 +10,10 @@ export default class ProductsController {
   /**
    * Display a list of products
    */
-  async index({ response }: HttpContext) {
-    const products = await this.productService.getAll()
+  async index({ request, response }: HttpContext) {
+    const page = request.input('page', 1)
+    const perPage = request.input('perPage', 50)
+    const products = await this.productService.getAll(page, perPage)
     return response.ok(products)
   }
 

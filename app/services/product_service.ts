@@ -4,6 +4,7 @@ import { S3StorageService } from './storage_service.js'
 import app from '@adonisjs/core/services/app'
 import Image from '#models/image'
 import { randomUUID } from 'node:crypto'
+import { HttpContext } from '@adonisjs/core/http'
 
 export default class ProductService {
   private storageService: S3StorageService
@@ -42,8 +43,14 @@ export default class ProductService {
   /**
    * Get all products
    */
-  async getAll(): Promise<Product[]> {
-    const products = await Product.query().paginate(1, 30)
+  async getAll(page: number, perPage: number): Promise<Product[]> {
+    const products = await Product.query()
+      .preload('colors')
+      .preload('sizes')
+      .preload('images', (query) => {
+        query.select('id', 'url', 'amazon')
+      })
+      .paginate(page, perPage)
     return products
   }
 
@@ -51,7 +58,14 @@ export default class ProductService {
    * Get a specific product by ID
    */
   async getById(id: number): Promise<Product | null> {
-    const product = await Product.query().where('id', id).preload('colors').preload('sizes').first()
+    const product = await Product.query()
+      .where('id', id)
+      .preload('colors')
+      .preload('sizes')
+      .preload('images', (query) => {
+        query.select('id', 'url', 'amazon')
+      })
+      .first()
     return product || null
   }
 

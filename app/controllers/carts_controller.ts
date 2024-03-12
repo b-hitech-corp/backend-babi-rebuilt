@@ -20,4 +20,5 @@ export default class CartsController {
     }
     return response.json({ message: 'Product added to cart' })
   }
+
 }

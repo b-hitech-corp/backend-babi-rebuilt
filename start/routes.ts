@@ -12,6 +12,7 @@ const ProductsController = () => import('#controllers/products_controller')
 const OrdersController = () => import('#controllers/orders_controller')
 const CartsController = () => import('#controllers/carts_controller')
 const NewslettersController = () => import('#controllers/newsletters_controller')
+const UsersController = () => import('#controllers/users_controller')
 
 router
   .group(() => {
