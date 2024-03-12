@@ -10,7 +10,7 @@ export class S3StorageService {
     },
   })
 
-  async uploadFile(fileKey: string, filePath: string): Promise<string | null> {
+  async uploadFile(fileKey: string, filePath: string): Promise<string> {
     const fileContent = await fsPromises.readFile(filePath)
     const params = {
       Bucket: process.env.S3_BUCKET!,
@@ -24,8 +24,7 @@ export class S3StorageService {
       const url = `https://${params.Bucket}.s3.amazonaws.com/${params.Key}`
       return url
     } catch (error) {
-      console.error("Erreur lors de l'upload:", error.message)
-      return null
+      throw new Error("Erreur lors de l'upload : " + error.message)
     }
   }
 }

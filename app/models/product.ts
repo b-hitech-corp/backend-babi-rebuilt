@@ -29,6 +29,9 @@ export default class Product extends BaseModel {
   declare name: string
 
   @column()
+  declare slug: string
+
+  @column()
   declare description: string
 
   @column()

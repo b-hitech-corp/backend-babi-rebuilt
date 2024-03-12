@@ -30,15 +30,32 @@ export default class ProductsController {
     }
 
     const payload = await createProductValidator.validate(request.all())
-    const result = await this.productService.create(payload, images)
-    return response.created(result)
+    try {
+      const product = await this.productService.create(payload, images)
+      return response.created(product)
+    } catch (error) {
+      return response.internalServerError({ message: error.message })
+    }
   }
 
   /**
-   * Show individual product
+   * Show individual product by ID
    */
   async show({ params, response }: HttpContext) {
-    const product = await this.productService.getById(params.id)
+    const product = await this.productService.getByIdOrSlug(params.id)
+
+    if (!product) {
+      return response.notFound({ message: 'Product not found ID' })
+    }
+
+    return response.ok(product)
+  }
+
+  /**
+   * Show individual product by slug
+   */
+  async getBySlug({ params, response }: HttpContext) {
+    const product = await this.productService.getBySlug(params.slug)
 
     if (!product) {
       return response.notFound({ message: 'Product not found' })
