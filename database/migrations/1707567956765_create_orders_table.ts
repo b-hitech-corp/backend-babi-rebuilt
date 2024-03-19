@@ -2,10 +2,10 @@ import { BaseSchema } from '@adonisjs/lucid/schema'
 
 export default class extends BaseSchema {
   protected tableName = 'orders'
-
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
+      table.string('tracking_number').nullable().unique()
       table
         .enum('status', ['pending', 'processing', 'shipped', 'delivered', 'canceled'])
         .notNullable()
@@ -24,6 +24,7 @@ export default class extends BaseSchema {
   }
 
   async down() {
+    this.schema.raw('DROP EXTENSION IF EXISTS "uuid-ossp"')
     this.schema.dropTable(this.tableName)
   }
 }

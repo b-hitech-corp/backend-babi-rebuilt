@@ -1,5 +1,6 @@
 import Order from '#models/order'
 import Product from '#models/product'
+import { randomUUID } from 'crypto'
 
 export default class OrderService {
   async getAll(): Promise<Order[]> {
@@ -37,6 +38,8 @@ export default class OrderService {
    */
   async create(data: any): Promise<Order> {
     const order = await Order.create(data)
+    order.tracking_number = randomUUID().toString()
+    await order.save()
     await Promise.all(
       data.products.map(async (item: any) => {
         const product = await Product.find(item.product_id)

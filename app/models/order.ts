@@ -24,6 +24,9 @@ export default class Order extends BaseModel {
   declare userId: number
 
   @column()
+  declare tracking_number: string
+
+  @column()
   declare status: string
 
   @column()
