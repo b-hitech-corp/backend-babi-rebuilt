@@ -1,57 +1,35 @@
 import User from '#models/user'
+import { registerValidator } from '#validators/auth'
+import { AccessToken } from '@adonisjs/auth/access_tokens'
+import UserDTO from '../dtos/user.js'
 
 export default class UserService {
-  async getAll(): Promise<User[]> {
-    const users = await User.query().paginate(1, 30)
+  async getAll(page: number, perPage: number): Promise<User[]> {
+    const users = await User.query().paginate(page, perPage)
     return users
   }
 
-  async getById(id: number): Promise<User | null> {
-    const user = await User.query().where('id', id).first()
-    return user || null
-  }
-
   async register(data: any): Promise<User> {
-    const user = await User.create(data)
+    const payload = await registerValidator.validate(data)
+    const user = await User.create(payload)
     return user
   }
 
-  async login(email: string, password: string): Promise<User | null> {
-    const user = await User.query().where('email', email).first()
-
-    if (!user) {
-      return null
-    }
-
-    if (user.password !== password) {
-      return null
-    }
-
-    return user
+  async login(data: any): Promise<{ user: UserDTO; token: AccessToken }> {
+    const { email, password } = data
+    const user = await User.verifyCredentials(email, password)
+    const userDTO = new UserDTO(user)
+    const token = await User.accessTokens.create(user)
+    return { user: userDTO, token }
   }
 
-  async update(id: number, data: any): Promise<User | null> {
-    const user = await User.find(id)
-
-    if (!user) {
-      return null
-    }
-
-    user.merge(data)
-    await user.save()
-
-    return user
+  async getAllUsers(): Promise<User[]> {
+    const users = await User.all()
+    return users
   }
 
-  async delete(id: number): Promise<{ success: boolean; message?: string }> {
-    const user = await User.find(id)
-
-    if (!user) {
-      return { success: false, message: 'User not found' }
-    }
-
-    await user.delete()
-
-    return { success: true }
+  async getUser(id: number): Promise<UserDTO> {
+    const user = await User.query().where('id', id).preload('orders').firstOrFail();
+    return new UserDTO(user)
   }
 }

@@ -1,54 +1,28 @@
 // import type { HttpContext } from '@adonisjs/core/http'
 
 import UserService from '#services/user_service'
+import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
 
+@inject()
 export default class UsersController {
   constructor(private readonly userService: UserService) {}
 
   /**
    * Display a list of users
    */
-  async index({ response }: HttpContext) {
-    const users = await this.userService.getAll()
+  async index({ request, response }: HttpContext) {
+    const page = request.input('page', 1)
+    const perPage = request.input('perPage', 50)
+    const users = await this.userService.getAll(page, perPage)
     return response.ok(users)
   }
 
   /**
-   * Store a new user
+   * Display a specific user
    */
-  async store({ request, response }: HttpContext) {
-    const payload = request.all()
-    const result = await this.userService.create(payload)
-    return response.created(result)
-  }
-
-  /**
-   * Show individual user
-   */
-  async show({ params, response }: HttpContext) {
-    const user = await this.userService.getById(params.id)
-
-    if (!user) {
-      return response.notFound({ message: 'User not found' })
-    }
-
+  async me({ response, params }: HttpContext) {
+    const user = await this.userService.getUser(params.id)
     return response.ok(user)
-  }
-
-  /**
-   * Update user
-   */
-  async update({ params, request }: HttpContext) {
-    const payload = request.all()
-    return this.userService.update(params.id, payload)
-  }
-
-  /**
-   * Delete user
-   */
-  async destroy({ params, response }: HttpContext) {
-    const result = await this.userService.delete(params.id)
-    return response.ok(result)
   }
 }

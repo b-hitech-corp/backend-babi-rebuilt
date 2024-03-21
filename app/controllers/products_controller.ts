@@ -52,19 +52,6 @@ export default class ProductsController {
   }
 
   /**
-   * Show individual product by slug
-   */
-  async getBySlug({ params, response }: HttpContext) {
-    const product = await this.productService.getBySlug(params.slug)
-
-    if (!product) {
-      return response.notFound({ message: 'Product not found' })
-    }
-
-    return response.ok(product)
-  }
-
-  /**
    * Update product
    */
   async update({ params, request }: HttpContext) {

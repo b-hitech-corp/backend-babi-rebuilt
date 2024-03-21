@@ -6,6 +6,7 @@ import type { HasMany, HasOne } from '@adonisjs/lucid/types/relations'
 import { column, BaseModel, hasMany, hasOne } from '@adonisjs/lucid/orm'
 import Order from './order.js'
 import Cart from './cart.js'
+import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -13,6 +14,8 @@ const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
 })
 
 export default class User extends compose(BaseModel, AuthFinder) {
+  static accessTokens = DbAccessTokensProvider.forModel(User)
+
   @hasMany(() => Order)
   declare orders: HasMany<typeof Order>
 
@@ -23,19 +26,19 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare id: number
 
   @column()
-  declare first_name: string | null
+  declare first_name: string
 
   @column()
-  declare last_name: string | null
+  declare last_name: string
 
   @column()
-  declare address: string
+  declare address: string | null
 
   @column()
-  declare phone_number: string
+  declare phone_number: string | null
 
   @column()
-  declare ip_address: string
+  declare ip_address: string | null
 
   @column()
   declare email: string
