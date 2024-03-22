@@ -29,7 +29,7 @@ export default class UserService {
   }
 
   async getUser(id: number): Promise<UserDTO> {
-    const user = await User.query().where('id', id).preload('orders').firstOrFail();
+    const user = await User.query().where('id', id).preload('orders').firstOrFail()
     return new UserDTO(user)
   }
 }

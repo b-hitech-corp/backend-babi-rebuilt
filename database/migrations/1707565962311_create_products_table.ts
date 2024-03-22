@@ -13,6 +13,8 @@ export default class extends BaseSchema {
       table.boolean('active')
       table.float('price')
 
+      table.integer('category_id').unsigned().references('categories.id').onDelete('CASCADE')
+
       table.timestamp('created_at')
       table.timestamp('updated_at')
     })

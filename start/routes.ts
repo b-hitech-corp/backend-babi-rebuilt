@@ -9,6 +9,7 @@
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
 const ProductsController = () => import('#controllers/products_controller')
+const CategoriesController = () => import('#controllers/categories_controller')
 const OrdersController = () => import('#controllers/orders_controller')
 const CartsController = () => import('#controllers/carts_controller')
 const NewslettersController = () => import('#controllers/newsletters_controller')
@@ -23,6 +24,8 @@ router
     router.resource('products', ProductsController).apiOnly()
 
     router.resource('orders', OrdersController).apiOnly()
+
+    router.resource('categories', CategoriesController).apiOnly()
 
     // Cart routes
     router.post('cart/add', [CartsController, 'addProductToCart'])

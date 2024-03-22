@@ -1,10 +1,11 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, hasMany, manyToMany } from '@adonisjs/lucid/orm'
-import type { HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
+import { BaseModel, belongsTo, column, hasMany, manyToMany } from '@adonisjs/lucid/orm'
+import type { BelongsTo, HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
 import Color from './color.js'
 import Size from './size.js'
 import Image from './image.js'
 import Order from './order.js'
+import Category from './category.js'
 
 export default class Product extends BaseModel {
   @manyToMany(() => Order, {
@@ -21,6 +22,12 @@ export default class Product extends BaseModel {
 
   @hasMany(() => Image)
   declare images: HasMany<typeof Image>
+
+  @belongsTo(() => Category)
+  declare category: BelongsTo<typeof Category>
+
+  @column()
+  declare categoryId: number
 
   @column({ isPrimary: true })
   declare id: number

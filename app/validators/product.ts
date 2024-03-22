@@ -12,6 +12,7 @@ export const createProductValidator = vine.compile(
     price: vine.number().min(0),
     sizes: vine.array(vine.number().min(1)),
     colors: vine.array(vine.number().min(1)),
+    categoryId: vine.number().min(1),
   })
 )
 

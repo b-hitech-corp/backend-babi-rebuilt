@@ -5,6 +5,7 @@ import app from '@adonisjs/core/services/app'
 import Image from '#models/image'
 import { randomUUID } from 'node:crypto'
 import string from '@adonisjs/core/helpers/string'
+import Category from '#models/category'
 
 export default class ProductService {
   private storageService: S3StorageService
@@ -19,10 +20,13 @@ export default class ProductService {
     let product: Product
     try {
       // Création du produit
+      console.log(data)
+      const category = await Category.findOrFail(data.categoryId)
       product = await Product.create(data)
       product.slug = string.slug(product.name)
       await product.related('sizes').attach(data.sizes)
       await product.related('colors').attach(data.colors)
+      await product.related('category').associate(category)
       await product.save()
     } catch (error) {
       throw new Error('Erreur lors de la création du produit : ' + error.message)
@@ -65,6 +69,9 @@ export default class ProductService {
       .preload('sizes')
       .preload('images', (query) => {
         query.select('id', 'url', 'amazon')
+      })
+      .preload('category', (query) => {
+        query.select('id', 'name')
       })
       .paginate(page, perPage)
     return products
