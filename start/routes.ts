@@ -39,8 +39,7 @@ router
     router.post('login', [AuthController, 'login'])
 
     // Stripe Webhook
-    router.post('stripe/webhook', [OrdersController, 'stripeWebhook'])
-    router.post('stripe/create-checkout-session', [StripesController, 'createCheckoutSession'])
+    router.post('stripe/webhook', [StripesController, 'webhook'])
 
     // Order routes, protected by auth middleware
     router

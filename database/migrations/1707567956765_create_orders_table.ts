@@ -7,7 +7,7 @@ export default class extends BaseSchema {
       table.increments('id')
       table.string('tracking_number').nullable().unique()
       table
-        .enum('status', ['pending', 'processing', 'shipped', 'delivered', 'canceled'])
+        .enum('status', ['pending', 'canceled', 'paid', 'unpaid'])
         .notNullable()
         .defaultTo('pending')
       table.boolean('is_delivered').defaultTo(false)
