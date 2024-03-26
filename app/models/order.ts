@@ -50,6 +50,12 @@ export default class Order extends BaseModel {
   @column()
   declare notes: string
 
+  @column()
+  declare stripe_payment_url: string
+
+  @column()
+  declare stripe_payment_id: string
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 

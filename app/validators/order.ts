@@ -10,7 +10,6 @@ export const createOrderValidator = vine.compile(
     payment_method: vine.string().trim().escape(),
     phone_number: vine.string().trim().escape(),
     notes: vine.string().trim().escape().optional(),
-    user_id: vine.number().min(1),
     products: vine.array(
       vine.object({ product_id: vine.number().min(1), quantity: vine.number().min(1) })
     ),
@@ -27,7 +26,6 @@ export const updateOrderValidator = vine.compile(
     phone_number: vine.string().trim().escape().optional(),
     payment_method: vine.string().trim().escape().optional(),
     notes: vine.string().trim().escape().optional(),
-    user_id: vine.number().min(1).optional(),
     products: vine
       .array(
         vine.object({ product_id: vine.number().min(1), quantity: vine.number().min(1) }).optional()

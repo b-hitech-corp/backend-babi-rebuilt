@@ -19,10 +19,10 @@ export default class OrdersController {
   /**
    * Store a new order
    */
-  async store({ request, response }: HttpContext) {
+  async store({ request, response, auth }: HttpContext) {
     const payload = await createOrderValidator.validate(request.all())
     try {
-      const $order = await this.orderService.create(payload)
+      const $order = await this.orderService.create(payload, auth)
       return response.created($order)
     } catch (error) {
       return response.badRequest({ message: error.message })
@@ -60,6 +60,12 @@ export default class OrdersController {
       return response.notFound({ message: 'Order not found' })
     }
 
+    return response.noContent()
+  }
+
+  async stripeWebhook({ request, response }: HttpContext) {
+    console.log('Stripe webhook called')
+    console.log(request.all())
     return response.noContent()
   }
 }

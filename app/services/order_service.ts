@@ -1,11 +1,18 @@
 import Order from '#models/order'
 import Product from '#models/product'
-import { randomUUID } from 'crypto'
+import { inject } from '@adonisjs/core'
+import { randomUUID } from 'node:crypto'
+import { StripeService } from './stripe_service.js'
 
+@inject()
 export default class OrderService {
+  constructor(protected stripeService: StripeService) {}
+
+  /**
+   * Get all orders
+   */
   async getAll(): Promise<Order[]> {
     const orders = await Order.all()
-
     return orders
   }
 
@@ -36,10 +43,11 @@ export default class OrderService {
   /**
    * Create a new order
    */
-  async create(data: any): Promise<Order> {
+  async create(data: any, auth: any): Promise<Order> {
     const order = await Order.create(data)
     order.tracking_number = randomUUID().toString()
     await order.save()
+    await auth.user!.related('orders').save(order)
     await Promise.all(
       data.products.map(async (item: any) => {
         const product = await Product.find(item.product_id)
@@ -52,6 +60,20 @@ export default class OrderService {
         }
       })
     )
+
+    if (data.payment_method === 'stripe') {
+      // Call stripe service to create a checkout session
+      try {
+        const session = await this.stripeService.createCheckoutSession(data)
+        order.stripe_payment_url = session.session.url!
+        order.stripe_payment_id = session.session.id!
+        order.total_price = session.session.amount_total! / 100
+        await order.save()
+      } catch (error) {
+        throw new Error('Error with stripe payment method, please retry later \n' + error.message)
+      }
+    }
+
     return order
   }
 

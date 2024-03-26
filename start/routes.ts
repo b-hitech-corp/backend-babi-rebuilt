@@ -15,6 +15,7 @@ const CartsController = () => import('#controllers/carts_controller')
 const NewslettersController = () => import('#controllers/newsletters_controller')
 const AuthController = () => import('#controllers/auth_controller')
 const UsersController = () => import('#controllers/users_controller')
+const StripesController = () => import('#controllers/stripes_controller')
 
 router
   .group(() => {
@@ -22,8 +23,6 @@ router
     router.get('products/topSelling', [ProductsController, 'topSelling'])
     router.get('products/mostOrdered', [ProductsController, 'mostOrdered'])
     router.resource('products', ProductsController).apiOnly()
-
-    router.resource('orders', OrdersController).apiOnly()
 
     router.resource('categories', CategoriesController).apiOnly()
 
@@ -38,6 +37,17 @@ router
     // Auth routes
     router.post('register', [AuthController, 'register'])
     router.post('login', [AuthController, 'login'])
+
+    // Stripe Webhook
+    router.post('stripe/webhook', [OrdersController, 'stripeWebhook'])
+    router.post('stripe/create-checkout-session', [StripesController, 'createCheckoutSession'])
+
+    // Order routes, protected by auth middleware
+    router
+      .group(() => {
+        router.resource('orders', OrdersController).apiOnly()
+      })
+      .use(middleware.auth())
 
     // User routes
     router

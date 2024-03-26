@@ -59,7 +59,8 @@
     "@vinejs/vine": "^1.7.1",
     "better-sqlite3": "^9.4.0",
     "luxon": "^3.4.4",
-    "reflect-metadata": "^0.2.1"
+    "reflect-metadata": "^0.2.1",
+    "stripe": "^14.22.0"
   },
   "eslintConfig": {
     "extends": "@adonisjs/eslint-config/app"

@@ -16,6 +16,8 @@ export default class extends BaseSchema {
       table.string('payment_method')
       table.string('phone_number')
       table.text('notes').nullable()
+      table.string('stripe_payment_url').nullable()
+      table.string('stripe_payment_id').nullable()
 
       table.integer('user_id').unsigned().references('users.id').onDelete('CASCADE')
       table.timestamp('created_at')
