@@ -44,9 +44,8 @@ export default class OrderService {
    * Create a new order
    */
   async create(data: any, auth: any): Promise<Order> {
+    data.tracking_number = randomUUID().toString()
     const order = await Order.create(data)
-    order.tracking_number = randomUUID().toString()
-    await order.save()
     await auth.user!.related('orders').save(order)
     await Promise.all(
       data.products.map(async (item: any) => {

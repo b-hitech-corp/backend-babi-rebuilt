@@ -20,10 +20,9 @@ export default class ProductService {
     let product: Product
     try {
       // Création du produit
-      console.log(data)
       const category = await Category.findOrFail(data.categoryId)
+      data.slug = string.slug(data.name)
       product = await Product.create(data)
-      product.slug = string.slug(product.name)
       await product.related('sizes').attach(data.sizes)
       await product.related('colors').attach(data.colors)
       await product.related('category').associate(category)
