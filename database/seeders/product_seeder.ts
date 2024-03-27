@@ -5,7 +5,7 @@ export default class extends BaseSeeder {
   async run() {
     // Write your database queries inside the run method
     await ProductFactory.createMany(10)
-      .then((data) => {})
+      .then(() => {})
       .catch((e) => {
         console.log(e)
       })

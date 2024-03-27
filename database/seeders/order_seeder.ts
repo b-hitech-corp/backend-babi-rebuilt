@@ -4,7 +4,7 @@ import { BaseSeeder } from '@adonisjs/lucid/seeders'
 export default class extends BaseSeeder {
   async run() {
     await OrderFactory.createMany(10)
-      .then((data) => {})
+      .then(() => {})
       .catch((e) => {
         console.log(e)
       })
