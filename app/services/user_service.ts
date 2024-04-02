@@ -1,5 +1,5 @@
 import User from '#models/user'
-import { registerValidator } from '#validators/auth'
+import { loginValidator, registerValidator } from '#validators/auth'
 import { AccessToken } from '@adonisjs/auth/access_tokens'
 import UserDTO from '../dtos/user.js'
 
@@ -16,7 +16,8 @@ export default class UserService {
   }
 
   async login(data: any): Promise<{ user: UserDTO; token: AccessToken }> {
-    const { email, password } = data
+    const payload = await loginValidator.validate(data)
+    const { email, password } = payload
     const user = await User.verifyCredentials(email, password)
     const userDTO = new UserDTO(user)
     const token = await User.accessTokens.create(user)
@@ -31,5 +32,31 @@ export default class UserService {
   async getUser(id: number): Promise<UserDTO> {
     const user = await User.query().where('id', id).preload('orders').firstOrFail()
     return new UserDTO(user)
+  }
+
+  async findOrCreateUser(googleUser: any): Promise<{ user: UserDTO; token: AccessToken }> {
+    let user = await User.findBy('google_id', googleUser.id)
+
+    if (user) {
+      const token = await User.accessTokens.create(user)
+      return { user: new UserDTO(user), token }
+    }
+
+    try {
+      const fullName = googleUser.name || 'Unknown'
+      const [firstName, lastName] = fullName.split(' ')
+
+      user = await User.create({
+        email: googleUser.email,
+        first_name: firstName,
+        last_name: lastName,
+        password: '',
+        google_id: googleUser.id,
+      })
+      const token = await User.accessTokens.create(user)
+      return { user: new UserDTO(user), token }
+    } catch (error) {
+      throw new Error(error.message)
+    }
   }
 }
