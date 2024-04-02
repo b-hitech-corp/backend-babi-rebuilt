@@ -26,3 +26,13 @@ register('ts-node/esm', import.meta.url)
  * Import ace console entrypoint
  */
 await import('./bin/console.js')
+
+
+/**
+ * 
+ * 
+COPY startup.sh /usr/src/app/startup.sh
+RUN chmod +x /usr/src/app/startup.sh
+
+CMD ["/usr/src/app/startup.sh"]
+ */

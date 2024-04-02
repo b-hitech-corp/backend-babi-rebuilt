@@ -17,6 +17,7 @@ const AuthController = () => import('#controllers/auth_controller')
 const UsersController = () => import('#controllers/users_controller')
 const StripesController = () => import('#controllers/stripes_controller')
 
+// Routes definition
 router
   .group(() => {
     // Products and orders routes
@@ -24,6 +25,7 @@ router
     router.get('products/mostOrdered', [ProductsController, 'mostOrdered'])
     router.resource('products', ProductsController).apiOnly()
 
+    // Categories routes
     router.resource('categories', CategoriesController).apiOnly()
 
     // Cart routes
@@ -37,6 +39,13 @@ router
     // Auth routes
     router.post('register', [AuthController, 'register'])
     router.post('login', [AuthController, 'login'])
+
+    // Social auth routes
+    router.get('auth/google', ({ ally }) => {
+      return ally.use('google').redirect()
+    })
+
+    router.get('auth/google/callback', [AuthController, 'handleGoogleCallback'])
 
     // Stripe Webhook
     router.post('stripe/webhook', [StripesController, 'webhook'])
