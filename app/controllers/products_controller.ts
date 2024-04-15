@@ -8,7 +8,12 @@ export default class ProductsController {
   constructor(private readonly productService: ProductService) {}
 
   /**
-   * Display a list of products
+   * @index
+   * @operationId getProducts
+   * @description Returns array of producs and it's relations
+   * @responseBody 200 - <Product[]>.with(relations).exclude(orders).paginated()
+   * @responseBody 400 - { message: 'Image is required' }
+
    */
   async index({ request, response }: HttpContext) {
     const page = request.input('page', 1)
@@ -19,6 +24,7 @@ export default class ProductsController {
 
   /**
    * Store a new product
+   * @store
    */
   async store({ request, response }: HttpContext) {
     const images = request.files('images', {
@@ -40,6 +46,7 @@ export default class ProductsController {
 
   /**
    * Show individual product by ID
+   * @show
    */
   async show({ params, response }: HttpContext) {
     const product = await this.productService.getByIdOrSlug(params.id)
@@ -53,6 +60,7 @@ export default class ProductsController {
 
   /**
    * Update product
+   * @update
    */
   async update({ params, request }: HttpContext) {
     const payload = await updateProductValidator.validate(request.all())
@@ -61,6 +69,7 @@ export default class ProductsController {
 
   /**
    * Delete product
+   * @destroy
    */
   async destroy({ params, response }: HttpContext) {
     const result = await this.productService.delete(params.id)
@@ -88,3 +97,7 @@ export default class ProductsController {
     return response.ok(products)
   }
 }
+function responseHeader(target: ProductsController, propertyKey: '200'): void {
+  throw new Error('Function not implemented.')
+}
+
