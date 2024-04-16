@@ -16,6 +16,8 @@ const NewslettersController = () => import('#controllers/newsletters_controller'
 const AuthController = () => import('#controllers/auth_controller')
 const UsersController = () => import('#controllers/users_controller')
 const StripesController = () => import('#controllers/stripes_controller')
+const SizesController = () => import('#controllers/sizes_controller')
+const ColorsController = () => import('#controllers/colors_controller')
 
 import AutoSwagger from 'adonis-autoswagger'
 import swagger from '#config/swagger'
@@ -41,6 +43,12 @@ router
 
     // Categories routes
     router.resource('categories', CategoriesController).apiOnly()
+
+    // Sizes routes
+    router.resource('sizes', SizesController).apiOnly()
+
+    // Colors routes
+    router.resource('colors', ColorsController).apiOnly()
 
     // Cart routes
     router.post('cart/add', [CartsController, 'addProductToCart'])
