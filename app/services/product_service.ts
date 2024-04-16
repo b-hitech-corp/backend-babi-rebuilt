@@ -92,7 +92,6 @@ export default class ProductService {
     return product || null
   }
 
-
   /**
    * Update a product by ID
    */

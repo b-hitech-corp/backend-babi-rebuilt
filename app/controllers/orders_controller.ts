@@ -10,14 +10,20 @@ export default class OrdersController {
   constructor(protected orderService: OrderService) {}
 
   /**
-   * Display a list of orders
+   * @index
+   * @operationId getAllOrders
+   * @description Get all orders
+   * @responseBody 200 - <Order[]>
    */
   async index({}: HttpContext) {
     return this.orderService.getAll()
   }
 
   /**
-   * Store a new order
+   * @store
+   * @operationId createOrder
+   * @description Create a new order
+   * @requestBody {"total_price":{"type":"number"},"status":{"type":"string"},"user_id":{"type":"number"},"products":{"type":"array","items":{"type":"object","properties":{"product_id":{"type":"number"},"quantity":{"type":"number"}}}}}
    */
   async store({ request, response, auth }: HttpContext) {
     const payload = await createOrderValidator.validate(request.all())
@@ -30,7 +36,11 @@ export default class OrdersController {
   }
 
   /**
-   * Show individual order
+   * @show
+   * @operationId getOrder
+   * @description Show individual order by ID
+   * @paramPath id - Id of the order
+   * @responseBody 200 - <Order>
    */
   async show({ params, response }: HttpContext) {
     const order = await this.orderService.getById(params.id)
@@ -42,7 +52,12 @@ export default class OrdersController {
   }
 
   /**
-   * Update order
+   * @update
+   * @operationId updateOrder
+   * @description Update order by ID
+   * @paramPath id - Id of the order
+   * @requestBody {"total_price":{"type":"number"},"status":{"type":"string"},"user_id":{"type":"number"},"products":{"type":"array","items":{"type":"object","properties":{"product_id":{"type":"number"},"quantity":{"type":"number"}}}}}
+   * 
    */
   async update({ params, request }: HttpContext) {
     const payload = await updateOrderValidator.validate(request.all())
@@ -50,7 +65,11 @@ export default class OrdersController {
   }
 
   /**
-   * Delete order
+   * @destroy
+   * @operationId deleteOrder
+   * @description Delete order by ID
+   * @paramPath id - Id of the order
+   * @reesponseBody 204 - No content
    */
   async destroy({ params, response }: HttpContext) {
     const result = await this.orderService.delete(params.id)
@@ -60,12 +79,6 @@ export default class OrdersController {
       return response.notFound({ message: 'Order not found' })
     }
 
-    return response.noContent()
-  }
-
-  async stripeWebhook({ request, response }: HttpContext) {
-    console.log('Stripe webhook called')
-    console.log(request.all())
     return response.noContent()
   }
 }

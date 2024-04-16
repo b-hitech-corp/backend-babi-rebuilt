@@ -8,7 +8,10 @@ export default class CategoriesController {
   constructor(private readonly categoryService: CategoryService) {}
 
   /**
-   * Display a list of categories
+   * @index
+   * @operationId getCategories
+   * @description Returns all categories
+   * @responseBody 200 - <Category[]>
    */
   async index({ response }: HttpContext) {
     const categories = await this.categoryService.getAll()
@@ -16,7 +19,11 @@ export default class CategoriesController {
   }
 
   /**
-   * Store a new category
+   * @store
+   * @operationId createCategory
+   * @description Create a new category
+   * @requestBody {"name":{"type":"string"},"description":{"type":"string"}}
+   * @responseBody 201 - <Category>
    */
   async store({ request, response }: HttpContext) {
     const payload = await createCategoryValidator.validate(request.all())
@@ -25,7 +32,11 @@ export default class CategoriesController {
   }
 
   /**
-   * Show individual category by ID
+   * @show
+   * @operationId getCategory
+   * @description Show individual category by ID
+   * @paramPath id - Id of the category
+   * @responseBody 200 - <Category>
    */
   async show({ params, response }: HttpContext) {
     const category = await this.categoryService.find(params.id)
@@ -38,7 +49,12 @@ export default class CategoriesController {
   }
 
   /**
-   * Update category
+   * @update
+   * @operationId updateCategory
+   * @description Update category by ID
+   * @paramPath id - Id of the category
+   * @requestBody {"name":{"type":"string"},"description":{"type":"string"}}
+   * @responseBody 200 - <Category>
    */
   async update({ params, request, response }: HttpContext) {
     const payload = await updateCategoryValidator.validate(request.all())
@@ -47,7 +63,11 @@ export default class CategoriesController {
   }
 
   /**
-   * Delete category
+   * @destroy
+   * @operationId deleteCategory
+   * @description Delete category by ID
+   * @paramPath id - Id of the category
+   * @response 204 - No content
    */
   async destroy({ params, response }: HttpContext) {
     const result = await this.categoryService.delete(params.id)

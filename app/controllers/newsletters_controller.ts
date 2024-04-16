@@ -3,6 +3,13 @@ import { createNewsletterSubscriberValidator } from '#validators/newsletter'
 import { HttpContext } from '@adonisjs/core/http'
 
 export default class NewslettersController {
+  /**
+   * @custom
+   * @operationId addEmail
+   * @description Add email to newsletter list
+   * @requestBody {"email":{"type":"string"}}
+   * @responseBody 201 - Email added to the newsletter list
+   **/
   async addEmail({ request, response }: HttpContext) {
     const payload = await createNewsletterSubscriberValidator.validate(request.all())
     try {
@@ -13,6 +20,14 @@ export default class NewslettersController {
     return response.status(201).json({ message: 'Email added to the newsletter list' })
   }
 
+  /**
+   * @custom
+   * @operationId removeEmail
+   * @description Remove email from newsletter list
+   * @pathParam email - Email to remove
+   * @responseBody 204 - Email removed from the newsletter list
+   * @responseBody 404 - Subscriber not found
+   **/
   async removeEmail({ params, response }: HttpContext) {
     const email = params.email as string
     const subscriber = await NewsletterSubscriber.findBy('email', email)
@@ -25,6 +40,12 @@ export default class NewslettersController {
     return response.noContent()
   }
 
+  /**
+   * @custom
+   * @operationId listEmails
+   * @description List all emails subscribed to the newsletter
+   * @responseBody 200 - <NewsletterSubscriber[]>
+   **/
   async listEmails({ response }: HttpContext) {
     const subscribers = await NewsletterSubscriber.all()
 

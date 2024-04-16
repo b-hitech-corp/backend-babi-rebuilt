@@ -10,10 +10,8 @@ export default class ProductsController {
   /**
    * @index
    * @operationId getProducts
-   * @description Returns array of producs and it's relations
+   * @description Returns all products
    * @responseBody 200 - <Product[]>.with(relations).exclude(orders).paginated()
-   * @responseBody 400 - { message: 'Image is required' }
-
    */
   async index({ request, response }: HttpContext) {
     const page = request.input('page', 1)
@@ -23,8 +21,11 @@ export default class ProductsController {
   }
 
   /**
-   * Store a new product
    * @store
+   * @operationId createProduct
+   * @description Create a new product
+   * @requestFormDataBody {"name":{"type":"string"},"images":{"type":"string","format":"binary"},"price":{"type":"number"},"description":{"type":"string"},"category_id":{"type":"number"}, "stock":{"type":"number"},"sizes":{"type":"array","items":{"type":"number"}},"colors":{"type":"array","items":{"type":"number"}}, "active":{"type":"boolean"}}
+   * @responseBody 201 - <Product>.with(relations).exclude(orders)
    */
   async store({ request, response }: HttpContext) {
     const images = request.files('images', {
@@ -45,22 +46,28 @@ export default class ProductsController {
   }
 
   /**
-   * Show individual product by ID
    * @show
+   * @operationId getProduct
+   * @description Show individual product by ID or slug
+   * @paramPath id - Id or slug of the product
+   * @responseBody 200 - <Product>.with(relations).exclude(orders)
+   * @responseBody 404 - { message: 'Product not found' }
    */
   async show({ params, response }: HttpContext) {
     const product = await this.productService.getByIdOrSlug(params.id)
 
     if (!product) {
-      return response.notFound({ message: 'Product not found ID' })
+      return response.notFound({ message: 'Product not found' })
     }
 
     return response.ok(product)
   }
 
   /**
-   * Update product
    * @update
+   * @operationId updateProduct
+   * @description Update product by ID
+   * @paramPath id - Id of the product
    */
   async update({ params, request }: HttpContext) {
     const payload = await updateProductValidator.validate(request.all())
@@ -68,8 +75,10 @@ export default class ProductsController {
   }
 
   /**
-   * Delete product
    * @destroy
+   * @operationId deleteProduct
+   * @description Delete product by ID
+   * @responseBody 204 - No content
    */
   async destroy({ params, response }: HttpContext) {
     const result = await this.productService.delete(params.id)
@@ -97,7 +106,3 @@ export default class ProductsController {
     return response.ok(products)
   }
 }
-function responseHeader(target: ProductsController, propertyKey: '200'): void {
-  throw new Error('Function not implemented.')
-}
-

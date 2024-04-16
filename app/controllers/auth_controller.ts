@@ -16,6 +16,13 @@ export default class AuthController {
     return response.created(userDTO)
   }
 
+  /**
+   * @custom
+   * @operationId login
+   * @description Login user
+   * @responseBody 201 - { user: UserDTO }
+   * @requestBody {"email":{"type":"string","format":"email"},"password":{"type":"string"}}
+   **/
   async login({ request, response }: HttpContext) {
     const payload = await loginValidator.validate(request.all())
     const user = await this.userService.login(payload)
