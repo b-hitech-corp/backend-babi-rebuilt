@@ -1,4 +1,4 @@
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
+import { S3Client, PutObjectCommand, S3, ObjectCannedACL } from '@aws-sdk/client-s3'
 import { promises as fsPromises } from 'node:fs'
 
 export class S3StorageService {
@@ -16,12 +16,13 @@ export class S3StorageService {
       Bucket: process.env.S3_BUCKET!,
       Key: fileKey,
       Body: fileContent,
+      ACL: ObjectCannedACL.public_read,
     }
 
     const command = new PutObjectCommand(params)
     try {
       await this.s3Client.send(command)
-      const url = `https://${params.Bucket}.s3.amazonaws.com/${params.Key}`
+      const url = `https://${params.Bucket}.s3.${process.env.S3_REGION}.amazonaws.com/${params.Key}`
       return url
     } catch (error) {
       throw new Error("Erreur lors de l'upload : " + error.message)
