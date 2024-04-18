@@ -1,5 +1,6 @@
-import { S3Client, PutObjectCommand, S3, ObjectCannedACL } from '@aws-sdk/client-s3'
+import { S3Client, PutObjectCommand, ObjectCannedACL } from '@aws-sdk/client-s3'
 import { promises as fsPromises } from 'node:fs'
+import mime from 'mime'
 
 export class S3StorageService {
   private s3Client = new S3Client({
@@ -12,11 +13,13 @@ export class S3StorageService {
 
   async uploadFile(fileKey: string, filePath: string): Promise<string> {
     const fileContent = await fsPromises.readFile(filePath)
+    const contentType = mime.getType(filePath) || 'image/jpeg'
     const params = {
       Bucket: process.env.S3_BUCKET!,
       Key: fileKey,
       Body: fileContent,
       ACL: ObjectCannedACL.public_read,
+      ContentType: contentType,
     }
 
     const command = new PutObjectCommand(params)

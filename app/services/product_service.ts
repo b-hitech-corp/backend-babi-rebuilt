@@ -6,6 +6,7 @@ import Image from '#models/image'
 import { randomUUID } from 'node:crypto'
 import string from '@adonisjs/core/helpers/string'
 import Category from '#models/category'
+import { promises as fsPromises } from 'node:fs'
 
 export default class ProductService {
   private storageService: S3StorageService
@@ -34,7 +35,11 @@ export default class ProductService {
       // Upload des images
       const uploadedImages: Image[] = []
       for (const image of images) {
-        const fileName = randomUUID().toString() + Date.now() + '.' + image.extname
+        const fileName =
+          'images/products/' + randomUUID().toString() + Date.now() + '.' + image.extname
+        // Create temporary file path
+        const tempFilePath = app.tmpPath('product_images', fileName)
+
         await image.move(app.tmpPath('product_images'), {
           name: fileName,
         })
@@ -47,6 +52,12 @@ export default class ProductService {
           amazon: url!,
         })
         uploadedImages.push(newImage)
+        // Delete temporary file even if upload fails
+        try {
+          await fsPromises.unlink(tempFilePath)
+        } catch (deleteError) {
+          console.error(`Error deleting temporary file: ${deleteError}`)
+        }
       }
       await product.related('images').saveMany(uploadedImages)
     } catch (error) {
@@ -56,6 +67,7 @@ export default class ProductService {
       }
       throw new Error(error.message)
     }
+
     return product
   }
 
