@@ -10,7 +10,7 @@ export default {
   tagIndex: 3,
   snakeCase: true,
   debug: true, // set to true, to get some useful debug output
-  ignore: ['/swagger', '/docs'],
+  ignore: ['/swagger', '/docs', '/api/v1/stripe/webhook'], // routes to ignore
   preferredPutPatch: 'PUT', // if PUT/PATCH are provided for the same route, prefer PUT
   common: {
     parameters: {

@@ -23,7 +23,7 @@ export default class ColorsController {
    * @store
    * @operationId createColor
    * @description Create a new color
-   * @requestBody {"name":{"type":"string"}}
+   * @requestBody {"name": "string"}
    * @responseBody 201 - <Color>
    */
   async store({ request, response }: HttpContext) {
@@ -53,7 +53,7 @@ export default class ColorsController {
    * @operationId updateSize
    * @description Update color by ID
    * @paramPath id - Id of the color
-   * @requestBody {"name":{"type":"string"}}
+   * @requestBody {"name": "string"}
    * @responseBody 200 - <Color>
    */
   async update({ params, request, response }: HttpContext) {

@@ -4,10 +4,10 @@ import { HttpContext } from '@adonisjs/core/http'
 
 export default class NewslettersController {
   /**
-   * @custom
+   * @addEmail
    * @operationId addEmail
    * @description Add email to newsletter list
-   * @requestBody {"email":{"type":"string"}}
+   * @requestBody {"email":"string"}
    * @responseBody 201 - Email added to the newsletter list
    **/
   async addEmail({ request, response }: HttpContext) {
@@ -17,11 +17,11 @@ export default class NewslettersController {
     } catch (error) {
       return response.badRequest({ message: 'Email already subscribed', code: response.status })
     }
-    return response.status(201).json({ message: 'Email added to the newsletter list' })
+    return response.created({ message: 'Email added to the newsletter list' })
   }
 
   /**
-   * @custom
+   * @removeEmail
    * @operationId removeEmail
    * @description Remove email from newsletter list
    * @pathParam email - Email to remove
@@ -41,7 +41,7 @@ export default class NewslettersController {
   }
 
   /**
-   * @custom
+   * @listEmails
    * @operationId listEmails
    * @description List all emails subscribed to the newsletter
    * @responseBody 200 - <NewsletterSubscriber[]>

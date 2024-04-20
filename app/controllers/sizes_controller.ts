@@ -23,7 +23,7 @@ export default class SizesController {
    * @store
    * @operationId createSize
    * @description Create a new size
-   * @requestBody {"name":{"type":"string"}}
+   * @requestBody {"name": "string"}
    * @responseBody 201 - <Size>
    */
   async store({ request, response }: HttpContext) {
@@ -53,7 +53,7 @@ export default class SizesController {
    * @operationId updateSize
    * @description Update size by ID
    * @paramPath id - Id of the size
-   * @requestBody {"name":{"type":"string"}}
+   * @requestBody {"name": "string"}
    * @responseBody 200 - <Size>
    */
   async update({ params, request, response }: HttpContext) {

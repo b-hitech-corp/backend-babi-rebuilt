@@ -44,7 +44,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare email: string
 
   @column()
-  declare password: string
+  declare password: string | null
 
   @column()
   declare google_id: string | null

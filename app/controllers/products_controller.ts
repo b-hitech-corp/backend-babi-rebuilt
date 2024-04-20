@@ -91,7 +91,10 @@ export default class ProductsController {
   }
 
   /**
-   * Top selling products
+   * @topSelling
+   * @operationId topSelling
+   * @description Top selling products
+   * @responseBody 200 - <Product[]>
    */
   async topSelling({ response }: HttpContext) {
     const products = await this.productService.topSelling()
@@ -99,7 +102,10 @@ export default class ProductsController {
   }
 
   /**
-   * Most ordered products
+   * @mostOrdered
+   * @operationId mostOrdered
+   * @description Most ordered products
+   * @responseBody 200 - <Product[]>
    */
   async mostOrdered({ response }: HttpContext) {
     const products = await this.productService.mostOrdered()

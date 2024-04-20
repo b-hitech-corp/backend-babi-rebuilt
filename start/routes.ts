@@ -58,6 +58,11 @@ router
     router.delete('newsletter/unsuscribe/:email', [NewslettersController, 'removeEmail'])
     router.get('newsletter/list', [NewslettersController, 'listEmails'])
 
+    // User routes
+    router.get('users', [UsersController, 'index'])
+    router.get('users/:id', [UsersController, 'profile'])
+    router.delete('users/:id', [UsersController, 'delete'])
+
     // Auth routes
     router.post('register', [AuthController, 'register'])
     router.post('login', [AuthController, 'login'])
@@ -66,7 +71,6 @@ router
     router.get('auth/google', ({ ally }) => {
       return ally.use('google').redirect()
     })
-
     router.get('auth/google/callback', [AuthController, 'handleGoogleCallback'])
 
     // Stripe Webhook

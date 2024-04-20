@@ -1,5 +1,3 @@
-// import type { HttpContext } from '@adonisjs/core/http'
-
 import UserService from '#services/user_service'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
@@ -21,8 +19,16 @@ export default class UsersController {
   /**
    * Display a specific user
    */
-  async me({ response, params }: HttpContext) {
+  async profile({ response, params }: HttpContext) {
     const user = await this.userService.getUser(params.id)
     return response.ok(user)
+  }
+
+  /**
+   * Delete a user with id
+   */
+  async delete({ response, params }: HttpContext) {
+    await this.userService.deleteUser(params.id)
+    return response.noContent()
   }
 }

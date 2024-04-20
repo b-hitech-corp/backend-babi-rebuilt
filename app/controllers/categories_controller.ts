@@ -22,7 +22,7 @@ export default class CategoriesController {
    * @store
    * @operationId createCategory
    * @description Create a new category
-   * @requestBody {"name":{"type":"string"},"description":{"type":"string"}}
+   * @requestBody {"name": "string", "description": "string"}
    * @responseBody 201 - <Category>
    */
   async store({ request, response }: HttpContext) {
@@ -53,7 +53,7 @@ export default class CategoriesController {
    * @operationId updateCategory
    * @description Update category by ID
    * @paramPath id - Id of the category
-   * @requestBody {"name":{"type":"string"},"description":{"type":"string"}}
+   * @requestBody {"name": "string", "description": "string"}
    * @responseBody 200 - <Category>
    */
   async update({ params, request, response }: HttpContext) {
