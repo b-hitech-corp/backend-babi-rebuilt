@@ -83,12 +83,6 @@ router
       })
       .use(middleware.auth())
 
-    // User routes
-    router
-      .group(() => {
-        router.get('/:id', [UsersController, 'me'])
-      })
-      .prefix('user')
-      .use(middleware.auth())
+ 
   })
   .prefix('api/v1')
