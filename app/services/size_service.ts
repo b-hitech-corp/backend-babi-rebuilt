@@ -1,5 +1,4 @@
 import Size from '#models/size'
-import string from '@adonisjs/core/helpers/string'
 
 export default class SizeService {
   /**
