@@ -55,4 +55,13 @@ export default class Product extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
+
+  serializeExtras() {
+    return {
+      id: this.id,
+      name: this.name,
+      price: this.price,
+      quantity: this.$extras.pivot_quantity, // Inclure les données pivot
+    }
+  }
 }

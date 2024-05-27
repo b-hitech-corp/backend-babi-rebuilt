@@ -24,8 +24,16 @@ export default class ProductService {
       const category = await Category.findOrFail(data.categoryId)
       data.slug = string.slug(data.name)
       product = await Product.create(data)
-      await product.related('sizes').attach(data.sizes)
-      await product.related('colors').attach(data.colors)
+      // Vérifier si des tailles sont fournies
+      if (data.sizes && data.sizes.length > 0) {
+        await product.related('sizes').attach(data.sizes)
+      }
+
+      // Vérifier si des couleurs sont fournies
+      if (data.colors && data.colors.length > 0) {
+        await product.related('colors').attach(data.colors)
+      }
+
       await product.related('category').associate(category)
       await product.save()
     } catch (error) {

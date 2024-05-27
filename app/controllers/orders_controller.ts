@@ -48,6 +48,7 @@ export default class OrdersController {
    */
   async show({ params, response }: HttpContext) {
     const order = await this.orderService.getById(params.id)
+
     if (!order) {
       return response.notFound({ message: 'Order not found' })
     }

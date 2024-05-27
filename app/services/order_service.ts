@@ -12,7 +12,17 @@ export default class OrderService {
    * Get all orders
    */
   async getAll(): Promise<Order[]> {
-    const orders = await Order.all()
+    const orders = await Order.query().preload('user', (query) => {
+      query.select(
+        'id',
+        'first_name',
+        'last_name',
+        'email',
+        'phone_number',
+        'address',
+        'ip_address'
+      )
+    })
     return orders
   }
 
@@ -23,15 +33,9 @@ export default class OrderService {
     const order = await Order.query()
       .where('id', id)
       .preload('user', (query) => {
-        query.select(
-          'id',
-          'first_name',
-          'last_name',
-          'email',
-          'phone_number',
-          'address',
-          'ip_address'
-        )
+        query
+          .select('id', 'first_name', 'last_name', 'email', 'phone_number', 'address')
+          .withCount('orders')
       })
       .preload('products', (query) => {
         query.pivotColumns(['quantity']).select('id', 'name', 'price')

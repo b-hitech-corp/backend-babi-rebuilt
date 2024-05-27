@@ -18,6 +18,7 @@ const UsersController = () => import('#controllers/users_controller')
 const StripesController = () => import('#controllers/stripes_controller')
 const SizesController = () => import('#controllers/sizes_controller')
 const ColorsController = () => import('#controllers/colors_controller')
+const StatisticsController = () => import('#controllers/statistics_controller')
 
 import AutoSwagger from 'adonis-autoswagger'
 import swagger from '#config/swagger'
@@ -90,5 +91,8 @@ router
       })
       .prefix('user')
       .use(middleware.auth())
+
+    // Statistics routes
+    router.get('statistics', [StatisticsController, 'index'])
   })
   .prefix('api/v1')

@@ -14,6 +14,7 @@ export default class Order extends BaseModel {
       createdAt: 'created_at',
       updatedAt: 'updated_at',
     },
+    pivotTable: 'order_product',
   })
   declare products: ManyToMany<typeof Product>
 
